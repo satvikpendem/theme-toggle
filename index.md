@@ -1,12 +1,14 @@
 # Theme Toggle
 
-These days, everyone wants a dark mode. It's not so hard to create, actually
+These days, everyone wants a dark mode. It's not so hard to create, actually, and it can be done in CSS, Javascript, and a combination of the two. You can even include nice animations as well.
 
 ## CSS Only
 
 Let's take a look at a CSS only solution:
 
-<iframe src="./css-example.html"></iframe>
+<iframe src="./examples/css/index.html"></iframe>
+
+_index.html_
 
 ```html
 <label for="toggle">
@@ -17,6 +19,8 @@ Let's take a look at a CSS only solution:
   <p>Hello</p>
 </div>
 ```
+
+_style.css_
 
 ```css
 :root {

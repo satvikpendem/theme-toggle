@@ -1,0 +1,14 @@
+:root {
+  --background-color: white;
+  --text-color: black;
+}
+
+div {
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+input:checked + div {
+  --background-color: black;
+  --text-color: white;
+}
