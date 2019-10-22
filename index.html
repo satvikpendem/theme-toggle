@@ -83,17 +83,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1 id="theme-toggle">Theme Toggle</h1>
 <p>These days, everyone wants a dark mode. It’s not so hard to create, actually, and it can be done in CSS, Javascript, and a combination of the two. You can even include nice animations as well.</p>
 <h2 id="css-only">CSS Only</h2>
-<p>Let’s take a look at a CSS only solution:</p>
 <iframe src="./examples/css/index.html">
 </iframe>
 <p><em>index.html</em></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">&lt;label</span><span class="ot"> for=</span><span class="st">&quot;toggle&quot;</span><span class="kw">&gt;</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  Toggle</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">&lt;/label&gt;</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;checkbox&quot;</span><span class="ot"> name=</span><span class="st">&quot;toggle&quot;</span><span class="ot"> id=</span><span class="st">&quot;toggle&quot;</span> <span class="kw">/&gt;</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">&lt;div&gt;</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">&lt;p&gt;</span>Hello<span class="kw">&lt;/p&gt;</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">&lt;/div&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">&lt;body&gt;</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  <span class="kw">&lt;label</span><span class="ot"> for=</span><span class="st">&quot;toggle&quot;</span><span class="kw">&gt;</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">    Toggle</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="kw">&lt;/label&gt;</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;checkbox&quot;</span><span class="ot"> name=</span><span class="st">&quot;toggle&quot;</span><span class="ot"> id=</span><span class="st">&quot;toggle&quot;</span> <span class="kw">/&gt;</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">&lt;div&gt;</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="kw">&lt;p&gt;</span>Hello<span class="kw">&lt;/p&gt;</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="kw">&lt;/div&gt;</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw">&lt;/body&gt;</span></a></code></pre></div>
 <p><em>style.css</em></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="in">:root</span> {</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  --background-color: <span class="dv">white</span>;</a>
@@ -110,9 +111,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb2-13" data-line-number="13">  --text-color: <span class="dv">white</span>;</a>
 <a class="sourceLine" id="cb2-14" data-line-number="14">}</a></code></pre></div>
 <p>We create some CSS variables that store theme information in <code>:root</code>, with <code>--background-color</code> and <code>--text-color</code>. <code>:root</code> represents the root of the document and is the same as putting any CSS in the <code>html</code> tag. We set the <code>div</code>’s <code>background</code> and <code>color</code> properties to be the value of each of those variables respectively through <code>var()</code>. We also create a checkbox that toggles the values of the CSS variables when clicked, through <code>input:checked + div</code>. This states that when the input is checked, apply the variable changes to the <code>input</code> and the <code>div</code>. Since only the <code>div</code> uses the variables, only the <code>div</code> changes. You’ll notice that a drawback of this method is that because only the <code>div</code> changes, the label and input do not change colors. We will cover why soon.</p>
-<p>Technically, the variables created <code>input:checked + div</code> are not the same as in <code>:root</code>, even though they have the same name; the later variables shadow the earlier variables since at no point are we modifying <code>:root</code>, only <code>input:checked</code> and <code>div</code>. Since <code>div</code> simply uses the variables based on their name, the variables still work. Now, why can’t we use <code>input:checked + :root</code> to modify <code>:root</code> directly? This is because CSS does not have a parent selector, only child or sibling selectors. Since <code>:root</code> is the root parent, there is no way to access it from <code>input</code>, which is its child. This also carries the consequence that the <code>input</code> itself cannot be nested inside any other element, which is why in the example the <code>input</code> is not enclosed in its <code>label</code>, and the <code>input</code> only affects the <code>div</code>. Your content, therefore, needs to be inside this <code>div</code>, or another element. You can, of course, make multiple <code>div</code>s but then you would have to add <code>input:checked + div-name</code> for every <code>div</code>. If you would like the appearance of nesting the <code>input</code>, such as to add the theme toggle on a navigation bar, you can <code>position: absolute</code> it and adjust the <code>top</code> and <code>left</code> values to make the <code>input</code> appear as if it were on the navigation bar, but in reality it would be a separate element.</p>
+<p>Technically, the variables created <code>input:checked + div</code> are not the same as in <code>:root</code>, even though they have the same name; the later variables shadow the earlier variables since at no point are we modifying <code>:root</code>, only <code>input:checked</code> and <code>div</code>. Since <code>div</code> simply uses the variables based on their name, the variables still work. Now, why can’t we use <code>input:checked + :root</code> to modify <code>:root</code> directly? This is because CSS does not have a parent selector, only child or sibling selectors. Since <code>:root</code> is the root parent, there is no way to access it from <code>input</code>, which is its child. This also carries the consequence that the <code>input</code> itself cannot be nested inside any other element, which is why in the example the <code>input</code> is not enclosed in its <code>label</code>, and the <code>input</code> only affects the <code>div</code> (we can also optionally remove the <code>label</code> of course). Your content, therefore, needs to be inside this <code>div</code>, or another element. You can, of course, make multiple <code>div</code>s but then you would have to add <code>input:checked + div-name</code> for every <code>div</code>. If you would like the appearance of nesting the <code>input</code>, such as to add the theme toggle on a navigation bar, you can <code>position: absolute</code> it and adjust the <code>top</code> and <code>left</code> values to make the <code>input</code> appear as if it were on the navigation bar, but in reality it would be a separate element.</p>
 <p>One of the few advantages of this approach is that it works without any Javascript enabled, and it can load quite fast as well. To ameliorate its disadvantages, we will need to use Javascript to trigger the global values.</p>
-<h2 id="javascript">JavaScript</h2>
+<h2 id="javascript">Javascript</h2>
+<iframe src="./examples/js/index.html">
+</iframe>
+<p><em>index.html</em></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html"><code class="sourceCode html"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">&lt;body&gt;</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">&lt;nav&gt;</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="kw">&lt;label&gt;</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">      Toggle</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">      <span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;checkbox&quot;</span><span class="ot"> name=</span><span class="st">&quot;toggle&quot;</span><span class="ot"> id=</span><span class="st">&quot;toggle&quot;</span> <span class="kw">/&gt;</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="kw">&lt;/label&gt;</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="kw">&lt;/nav&gt;</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="kw">&lt;div&gt;</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">    <span class="kw">&lt;p&gt;</span>Hello<span class="kw">&lt;/p&gt;</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="kw">&lt;/div&gt;</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">  <span class="kw">&lt;script</span><span class="ot"> src=</span><span class="st">&quot;./script.js&quot;</span><span class="kw">&gt;&lt;/script&gt;</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="kw">&lt;/body&gt;</span></a></code></pre></div>
+<p><em>style.css</em></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode css"><code class="sourceCode css"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="in">:root</span> {</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">  --background-color: <span class="dv">white</span>;</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  --text-color: <span class="dv">black</span>;</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">body {</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="kw">background</span>: var(--background-color);</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="kw">color</span>: var(--text-color);</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">}</a></code></pre></div>
+<p><em>script.js</em></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode js"><code class="sourceCode javascript"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">const</span> root <span class="op">=</span> <span class="va">document</span>.<span class="at">querySelector</span>(<span class="st">&quot;:root&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">const</span> toggle <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementById</span>(<span class="st">&quot;toggle&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="va">toggle</span>.<span class="at">addEventListener</span>(<span class="st">&quot;click&quot;</span><span class="op">,</span> () <span class="op">=&gt;</span> <span class="op">{</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="va">root</span>.<span class="va">style</span>.<span class="at">getPropertyValue</span>(<span class="st">&quot;--background-color&quot;</span>) <span class="op">===</span> <span class="st">&quot;black&quot;</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">    <span class="op">?</span> <span class="va">root</span>.<span class="va">style</span>.<span class="at">setProperty</span>(<span class="st">&quot;--background-color&quot;</span><span class="op">,</span> <span class="st">&quot;white&quot;</span>)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">    : <span class="va">root</span>.<span class="va">style</span>.<span class="at">setProperty</span>(<span class="st">&quot;--background-color&quot;</span><span class="op">,</span> <span class="st">&quot;black&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">  <span class="va">root</span>.<span class="va">style</span>.<span class="at">getPropertyValue</span>(<span class="st">&quot;--text-color&quot;</span>) <span class="op">===</span> <span class="st">&quot;white&quot;</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">    <span class="op">?</span> <span class="va">root</span>.<span class="va">style</span>.<span class="at">setProperty</span>(<span class="st">&quot;--text-color&quot;</span><span class="op">,</span> <span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">    : <span class="va">root</span>.<span class="va">style</span>.<span class="at">setProperty</span>(<span class="st">&quot;--text-color&quot;</span><span class="op">,</span> <span class="st">&quot;white&quot;</span>)<span class="op">;</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="op">}</span>)<span class="op">;</span></a></code></pre></div>
+<p>We do much the same thing as in the CSS only example but with a few key differences: we nest the input in a <code>nav</code> and we apply the CSS variables to the entire body rather than an inner <code>div</code>.</p>
 <h2 id="css-in-js">CSS in JS</h2>
 <h2 id="svg-animations">SVG Animations</h2>
 </body>
